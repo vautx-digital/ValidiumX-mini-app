@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validium-X</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .tabs {
+      display: flex;
+      background-color: #222;
+      border-radius: 20px;
+      padding: 4px;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      border-radius: 16px;
+      border: none;
+      background-color: transparent;
+      color: #888;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      background-color: #444;
+      color: white;
+    }
+    
+    .logo {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      background-color: #222;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .logo-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      filter: blur(20px);
+    }
+    
+    .logo-text {
+      position: relative;
+      z-index: 1;
+      font-size: 40px;
+    }
+    
+    .countdown {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .countdown-label {
+      color: #aaa;
+    }
+    
+    .countdown-time {
+      font-size: 24px;
+      font-family: monospace;
+    }
+    
+    .card {
+      width: 100%;
+      background-color: #222;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+    }
+    
+    .balance {
+      display: flex;
+      align-items: center;
+    }
+    
+    .balance-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      border-radius: 50%;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .balance-info .label {
+      color: #aaa;
+    }
+    
+    .balance-info .value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    
+    .balance-info .convert {
+      color: #888;
+      cursor: pointer;
+    }
+    
+    .feature-card {
+      position: relative;
+    }
+    
+    .coming-soon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+    
+    .coming-soon span {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .feature {
+      display: flex;
+      align-items: center;
+    }
+    
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
+    
+    .feature-info .title {
+      margin-bottom: 4px;
+    }
+    
+    .feature-info .desc {
+      font-size: 14px;
+      color: #aaa;
+    }
+    
+    .about {
+      padding: 20px;
+      text-align: center;
+      display: none;
+    }
+    
+    .about h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .about p {
+      color: #aaa;
+      line-height: 1.6;
+    }
+    
+    .success-message {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 80%;
+      max-width: 300px;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+      border-radius: 10px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+      z-index: 100;
+    }
+    
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: scale(1.05);
+        filter: brightness(1.2);
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab active" id="home-tab">Home</button>
+      <button class="tab" id="about-tab">About</button>
+    </div>
+    
+    <!-- Home Content -->
+    <div id="home-content">
+      <!-- Logo -->
+      <div class="logo" id="claim-logo">
+        <div class="logo-glow"></div>
+        <div class="logo-text pulse">VLD</div>
+      </div>
+      
+      <!-- Claim Status -->
+      <div id="claim-status" style="text-align: center; margin-bottom: 20px; color: #aaa;">
+        Tap the logo to claim your daily VLD-X
+      </div>
+      
+      <!-- Countdown -->
+      <div class="countdown">
+        <p class="countdown-label">Claim your VLD in</p>
+        <p class="countdown-time" id="countdown">15:30:21</p>
+      </div>
+      
+      <!-- Balance Card -->
+      <div class="card">
+        <div class="balance">
+          <div class="balance-icon">VLD</div>
+          <div class="balance-info">
+            <div class="label">VLD Balance</div>
+            <div class="value">49.961950</div>
+            <div class="convert">Convert to USD &gt;</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Feature Cards -->
+      <div class="card feature-card">
+        <div class="coming-soon">
+          <span>COMING SOON</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"></div>
+          <div class="feature-info">
+            <div class="title">VLD Convert</div>
+            <div class="desc">Convert any token to USD</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card feature-card">
+        <div class="coming-soon">
+          <span>COMING SOON</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"></div>
+          <div class="feature-info">
+            <div class="title">VLD Pay</div>
+            <div class="desc">Pay and get paid in VLD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- About Content -->
+    <div id="about-content" class="about">
+      <h1>About Validium-X</h1>
+      <p>
+        Validium-X is a next-generation cryptocurrency designed to bring security, scalability, and trust to the
+        blockchain ecosystem. Built on the principles of decentralization and cryptographic integrity, Validium-X
+        empowers users, developers, and businesses to engage in fast, low-cost, and secure digital transactions.
+      </p>
+      <div style="margin-top: 30px; font-weight: bold; font-size: 18px;">
+        Backed by a Robust Distributed Ledger
+      </div>
+    </div>
+    
+    <!-- Success Message -->
+    <div class="success-message" id="success-message">
+      Success! You've claimed 1 Validium-X Coin
+    </div>
+  </div>
+  
+  <script>
+    // Tab switching
+    const homeTab = document.getElementById('home-tab');
+    const aboutTab = document.getElementById('about-tab');
+    const homeContent = document.getElementById('home-content');
+    const aboutContent = document.getElementById('about-content');
+    
+    homeTab.addEventListener('click', function() {
+      homeTab.classList.add('active');
+      aboutTab.classList.remove('active');
+      homeContent.style.display = 'block';
+      aboutContent.style.display = 'none';
+    });
+    
+    aboutTab.addEventListener('click', function() {
+      aboutTab.classList.add('active');
+      homeTab.classList.remove('active');
+      aboutContent.style.display = 'block';
+      homeContent.style.display = 'none';
+    });
+    
+    // Claim functionality
+    const claimLogo = document.getElementById('claim-logo');
+    const claimStatus = document.getElementById('claim-status');
+    const successMessage = document.getElementById('success-message');
+    
+    // Check if already claimed
+    function checkClaimed() {
+      const lastClaimDate = localStorage.getItem('vldLastClaim');
+      if (lastClaimDate) {
+        const today = new Date().toDateString();
+        if (new Date(lastClaimDate).toDateString() === today) {
+          claimStatus.textContent = "You've already claimed today. Come back tomorrow.";
+          claimLogo.querySelector('.logo-text').classList.remove('pulse');
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    let hasClaimed = checkClaimed();
+    
+    claimLogo.addEventListener('click', function() {
+      if (!hasClaimed) {
+        hasClaimed = true;
+        localStorage.setItem('vldLastClaim', new Date().toString());
+        claimStatus.textContent = "You've already claimed today. Come back tomorrow.";
+        claimLogo.querySelector('.logo-text').classList.remove('pulse');
+        
+        // Show success message
+        successMessage.classList.add('show');
+        setTimeout(function() {
+          successMessage.classList.remove('show');
+        }, 3000);
+      }
+    });
+    
+    // Countdown timer
+    function updateCountdown() {
+      const countdownEl = document.getElementById('countdown');
+      let [hours, minutes, seconds] = countdownEl.textContent.split(':').map(Number);
+      
+      if (seconds > 0) {
+        seconds--;
+      } else if (minutes > 0) {
+        minutes--;
+        seconds = 59;
+      } else if (hours > 0) {
+        hours--;
+        minutes = 59;
+        seconds = 59;
+      }
+      
+      countdownEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>

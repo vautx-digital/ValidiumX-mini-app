@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validium-X</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      overflow-y: hidden;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    .tabs {
+      display: flex;
+      background-color: #222;
+      border-radius: 20px;
+      padding: 4px;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      border-radius: 16px;
+      border: none;
+      background-color: transparent;
+      color: #888;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      background-color: #444;
+      color: white;
+    }
+    
+    .logo {
+      width: 260px; /* Increased from 240px */
+      height: 260px; /* Increased from 240px */
+      margin: 15px auto; /* Reduced from 20px to balance the larger size */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .logo-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      filter: blur(20px);
+      z-index: 0;
+    }
+    
+    .logo-image {
+      position: relative;
+      z-index: 1;
+      width: 220px; /* Increased from 200px */
+      height: 220px; /* Increased from 200px */
+      border-radius: 50%;
+      overflow: hidden;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+    
+    .logo-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .countdown {
+      text-align: center;
+      margin: 15px 0; /* Reduced from 20px to tighten spacing */
+    }
+    
+    .countdown-label {
+      color: #aaa;
+    }
+    
+    .countdown-time {
+      font-size: 24px;
+      font-family: monospace;
+    }
+    
+    .card {
+      width: 100%;
+      background-color: #222;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      box-sizing: border-box;
+    }
+    
+    .balance {
+      display: flex;
+      align-items: center;
+    }
+    
+    .balance-icon {
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+    
+    .balance-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .balance-info .label {
+      color: #aaa;
+    }
+    
+    .balance-info .value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    
+    .balance-info .convert {
+      color: #888;
+      cursor: pointer;
+    }
+    
+    /* Enhanced Box Slider styles */
+    .box-slider-container {
+      width: calc(100% - 30px); /* Match wallet card width including padding */
+      margin-top: auto;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .box-slide {
+      width: 100%;
+      height: 150px; /* Increased from 130px for better landscape display */
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: none;
+      position: relative;
+      background-color: #111; /* Background color for the slide */
+    }
+
+    .box-slide.active {
+      display: block;
+    }
+    
+    .slide-image-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #111; /* Add background color to prevent transparency issues */
+    }
+
+    .slide-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Changed to contain to ensure important elements aren't cut off */
+      display: block; /* Ensure no extra space */
+    }
+    
+    /* Slider navigation dots */
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #555;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .dot.active {
+      background-color: #fff;
+    }
+    
+    .about {
+      padding: 20px;
+      text-align: center;
+      display: none;
+    }
+    
+    .about h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .about p {
+      color: #aaa;
+      line-height: 1.6;
+    }
+    
+    .base-logo {
+      width: 150px;
+      height: auto;
+      margin: 30px auto 20px;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+    }
+    
+    .slogan {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #ddd;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+    
+    .sub-slogan {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .social-link:hover {
+      background-color: #444;
+      transform: scale(1.1);
+    }
+    
+    .social-icon {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+    
+    .success-message {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 80%;
+      max-width: 300px;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+      border-radius: 10px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+      z-index: 100;
+    }
+    
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Splash screen styles */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .splash-logo {
+      width: 180px;
+      height: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+      animation: pulse-splash 2s infinite ease-in-out;
+    }
+    
+    .splash-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      display: none; /* Hide the title as requested */
+    }
+    
+    .splash-slogan {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ddd;
+      margin-bottom: 5px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+    
+    .splash-sub-slogan {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+    
+    /* World ID button styles */
+    .world-id-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .world-id-button:hover {
+      background-color: #444;
+    }
+    
+    .world-id-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      background-color: white;
+      border-radius: 50%;
+    }
+    
+    .verification-status {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .verification-status.verified {
+      color: #4CAF50;
+    }
+    
+    .verification-status.loading {
+      color: #FFC107;
+    }
+    
+    .verification-status .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+    
+    .enter-app-button {
+      background-color: #2a6b2a;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 30px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+    
+    .enter-app-button.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    
+    .enter-app-button:hover {
+      background-color: #358535;
+      transform: translateY(-2px);
+    }
+    
+    /* Gift box animation */
+    .gift-box-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    
+    .gift-box-container.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .gift-box {
+      width: 200px;
+      height: 200px;
+      background-color: #e74c3c;
+      position: relative;
+      border-radius: 10px;
+      animation: bounce 1s infinite alternate;
+      box-shadow: 0 0 30px rgba(231, 76, 60, 0.7);
+    }
+    
+    .gift-box-lid {
+      width: 220px;
+      height: 40px;
+      background-color: #c0392b;
+      position: absolute;
+      top: -20px;
+      left: -10px;
+      border-radius: 5px;
+      transform-origin: center;
+      animation: open-lid 2s forwards 1s;
+    }
+    
+    .gift-box-ribbon {
+      width: 30px;
+      height: 200px;
+      background-color: #f1c40f;
+      position: absolute;
+      left: 85px;
+      top: 0;
+    }
+    
+    .gift-box-ribbon-horizontal {
+      width: 200px;
+      height: 30px;
+      background-color: #f1c40f;
+      position: absolute;
+      top: 85px;
+    }
+    
+    .gift-box-message {
+      position: absolute;
+      bottom: -80px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    
+    .gift-box-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      color: white;
+    }
+    
+    /* Copy notification */
+    .copy-notification {
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 80%;
+      max-width: 300px;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+      border-radius: 10px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+      z-index: 100;
+    }
+    
+    .copy-notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @keyframes bounce {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-20px);
+      }
+    }
+    
+    @keyframes open-lid {
+      0% {
+        transform: rotateX(0);
+      }
+      50% {
+        transform: rotateX(-80deg) translateY(-20px);
+      }
+      100% {
+        transform: rotateX(-80deg) translateY(-20px);
+      }
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        filter: brightness(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      }
+      50% {
+        transform: scale(1.05);
+        filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      }
+    }
+    
+    @keyframes pulse-splash {
+      0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+      }
+      50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1));
+      }
+      100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+      }
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    /* Spacer to push slider to bottom */
+    .spacer {
+      flex-grow: 1;
+      min-height: 20px;
+    }
+
+    /* Content wrapper to ensure proper spacing */
+    .content-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      padding-bottom: 20px; /* Add padding to ensure space between content and slider */
+    }
+
+    /* Footer to ensure slider is at the bottom */
+    .footer {
+      width: 100%;
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen with World ID Verification -->
+  <div class="splash-screen" id="splash-screen">
+    <img src="/images/base_logo_new.png" alt="Validium-X Logo" class="splash-logo">
+    <div class="splash-slogan">The Backbone of Crypto</div>
+    <div class="splash-sub-slogan">Powered by Validium-X</div>
+    
+    <!-- World ID Verification Button -->
+    <button class="world-id-button" id="world-id-button">
+      <div class="world-id-icon"></div>
+      Verify with World ID
+    </button>
+    
+    <!-- Verification Status -->
+    <div class="verification-status" id="verification-status">
+      Please verify with World ID to continue
+    </div>
+    
+    <!-- Enter App Button (shows after verification) -->
+    <button class="enter-app-button" id="enter-app-button">
+      Enter App
+    </button>
+  </div>
+
+  <!-- Gift Box Animation -->
+  <div class="gift-box-container" id="gift-box-container">
+    <div class="gift-box">
+      <div class="gift-box-lid"></div>
+      <div class="gift-box-ribbon"></div>
+      <div class="gift-box-ribbon-horizontal"></div>
+      <div class="gift-box-message">You received 50 VIX!</div>
+    </div>
+    <div class="gift-box-close" id="gift-box-close">×</div>
+  </div>
+
+  <!-- Copy Notification -->
+  <div class="copy-notification" id="copy-notification">
+    Pautan disalin ke clipboard!
+  </div>
+
+  <div class="container">
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab active" id="home-tab">Home</button>
+      <button class="tab" id="about-tab">About</button>
+    </div>
+    
+    <!-- Home Content -->
+    <div id="home-content" class="content-wrapper">
+      <!-- Logo -->
+      <div class="logo" id="claim-logo">
+        <div class="logo-glow"></div>
+        <div class="logo-image pulse" id="logo-element">
+          <img src="/images/VLD_logo.png" alt="Validium-X Logo">
+        </div>
+      </div>
+      
+      <!-- Claim Status -->
+      <div id="claim-status" style="text-align: center; margin-bottom: 20px; color: #aaa;">
+        Tap the logo to claim your daily VIX
+      </div>
+      
+      <!-- Countdown -->
+      <div class="countdown">
+        <p class="countdown-label">Claim your VIX in</p>
+        <p class="countdown-time" id="countdown">15:30:21</p>
+      </div>
+      
+      <!-- Balance Card -->
+      <div class="card">
+        <div class="balance">
+          <div class="balance-icon">
+            <img src="/images/VLD_logo.png" alt="VIX">
+          </div>
+          <div class="balance-info">
+            <div class="label">VIX Balance</div>
+            <div class="value" id="vix-balance">49.961950</div>
+            <div class="convert">Convert to USD &gt;</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer with slider at the bottom -->
+      <div class="footer">
+        <!-- Enhanced Box Slider -->
+        <div class="box-slider-container">
+          <!-- Slide 1: Invite Friends (Image only) -->
+          <div class="box-slide active" id="box-slide-1">
+            <div class="slide-image-container">
+              <img src="/images/invite.png" alt="Invite Friends" class="slide-image">
+            </div>
+          </div>
+
+          <!-- Slide 2: Validium XE (Image only) -->
+          <div class="box-slide" id="box-slide-2">
+            <div class="slide-image-container">
+              <img src="/images/VLDXE-comming-soon.png" alt="Validium XE" class="slide-image">
+            </div>
+          </div>
+
+          <!-- Slide 3: Buy VIX (Image only) -->
+          <div class="box-slide" id="box-slide-3" data-link="https://worldcoin.org/mini-app?app_id=app_15daccf5b7d4ec9b7dbba044a8fdeab5&path=app/token/0xF59FDdC0Dc8AB0a63b3323Cdc316f2bC131740E2">
+            <div class="slide-image-container">
+              <img src="/images/VIX.png" alt="Buy VIX" class="slide-image">
+            </div>
+          </div>
+          
+          <!-- Slider Navigation Dots -->
+          <div class="slider-dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- About Content -->
+    <div id="about-content" class="about">
+      <h1>About Validium-X</h1>
+      <p>
+        Validium-X is a blockchain technology built on WorldChain, designed to be the backbone of secure, fast, and decentralized digital finance. With a focus on integrity, high performance, and security, Validium-X powers a stronger, more reliable digital economy, paving the way for limitless innovation.
+      </p>
+      
+      <!-- Base Logo -->
+      <img src="/images/base_logo_new.png" alt="Validium-X Base Logo" class="base-logo">
+      
+      <!-- Slogan -->
+      <div class="slogan">
+        The Backbone of Crypto
+      </div>
+      <div class="sub-slogan">
+        Powered by Validium-X
+      </div>
+      
+      <!-- Social Links -->
+      <div class="social-links">
+        <!-- Twitter -->
+        <a href="https://x.com/vilidiumX" target="_blank" class="social-link" title="X.com">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        
+        <!-- Telegram -->
+        <a href="https://t.me/ValidiumX" target="_blank" class="social-link" title="Telegram">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.05-.2-.06-.06-.17-.04-.25-.02-.11.02-1.84 1.17-5.2 3.44-.49.33-.94.5-1.35.48-.44-.01-1.29-.25-1.92-.46-.78-.26-1.4-.4-1.34-.85.03-.22.32-.45.88-.68 3.44-1.5 5.73-2.49 6.88-2.95 3.28-1.33 3.97-1.56 4.41-1.56.1 0 .32.02.46.1.17.1.28.25.31.42.04.27-.01.61-.19 1.09z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Success Message -->
+    <div class="success-message" id="success-message">
+      Success! You've claimed 1 VIX Coin
+    </div>
+  </div>
+  
+  <script>
+    // World ID verification on splash screen
+    const worldIDButton = document.getElementById('world-id-button');
+    const verificationStatus = document.getElementById('verification-status');
+    const enterAppButton = document.getElementById('enter-app-button');
+    const splashScreen = document.getElementById('splash-screen');
+    
+    let isWorldIDVerified = false;
+    let worldID = "";
+    let username = "User" + Math.floor(Math.random() * 10000);
+    
+    worldIDButton.addEventListener('click', function() {
+      // Disable button during verification
+      worldIDButton.disabled = true;
+      worldIDButton.style.opacity = '0.7';
+      
+      // Show loading state
+      verificationStatus.innerHTML = '<div class="spinner"></div> Verifying with World ID...';
+      verificationStatus.className = 'verification-status loading';
+      
+      // Simulate World ID verification (would be replaced with actual World ID SDK)
+      setTimeout(function() {
+        isWorldIDVerified = true;
+        worldID = "wld_" + Math.random().toString(36).substring(2, 15);
+        
+        // Update verification status
+        verificationStatus.innerHTML = '✓ Successfully verified with World ID';
+        verificationStatus.className = 'verification-status verified';
+        
+        // Update button
+        worldIDButton.textContent = "✓ Verified with World ID";
+        worldIDButton.style.backgroundColor = "#2a6b2a";
+        worldIDButton.disabled = true;
+        
+        // Show enter app button
+        enterAppButton.classList.add('show');
+        
+        // Store verification in localStorage
+        localStorage.setItem('worldIDVerified', 'true');
+        localStorage.setItem('worldID', worldID);
+        localStorage.setItem('username', username);
+        
+        // Check URL for referral
+        checkReferralInURL();
+      }, 2000);
+    });
+    
+    // Check if already verified
+    if (localStorage.getItem('worldIDVerified') === 'true') {
+      isWorldIDVerified = true;
+      worldID = localStorage.getItem('worldID') || "wld_" + Math.random().toString(36).substring(2, 15);
+      username = localStorage.getItem('username') || "User" + Math.floor(Math.random() * 10000);
+      
+      verificationStatus.innerHTML = '✓ Successfully verified with World ID';
+      verificationStatus.className = 'verification-status verified';
+      worldIDButton.textContent = "✓ Verified with World ID";
+      worldIDButton.style.backgroundColor = "#2a6b2a";
+      worldIDButton.disabled = true;
+      enterAppButton.classList.add('show');
+      
+      // Check URL for referral
+      checkReferralInURL();
+    }
+    
+    // Enter app button
+    enterAppButton.addEventListener('click', function() {
+      splashScreen.style.opacity = '0';
+      setTimeout(function() {
+        splashScreen.style.display = 'none';
+      }, 500);
+    });
+    
+    // Tab switching
+    const homeTab = document.getElementById('home-tab');
+    const aboutTab = document.getElementById('about-tab');
+    const homeContent = document.getElementById('home-content');
+    const aboutContent = document.getElementById('about-content');
+    
+    homeTab.addEventListener('click', function() {
+      homeTab.classList.add('active');
+      aboutTab.classList.remove('active');
+      homeContent.style.display = 'flex';
+      aboutContent.style.display = 'none';
+    });
+    
+    aboutTab.addEventListener('click', function() {
+      aboutTab.classList.add('active');
+      homeTab.classList.remove('active');
+      aboutContent.style.display = 'block';
+      homeContent.style.display = 'none';
+    });
+    
+    // Claim functionality
+    const claimLogo = document.getElementById('claim-logo');
+    const logoElement = document.getElementById('logo-element');
+    const claimStatus = document.getElementById('claim-status');
+    const successMessage = document.getElementById('success-message');
+    const vixBalanceElement = document.getElementById('vix-balance');
+    
+    // Check if already claimed
+    function checkClaimed() {
+      const lastClaimDate = localStorage.getItem('vixLastClaim');
+      if (lastClaimDate) {
+        const lastClaimTime = new Date(lastClaimDate).getTime();
+        const now = new Date().getTime();
+        const hoursSinceLastClaim = (now - lastClaimTime) / (1000 * 60 * 60);
+        
+        if (hoursSinceLastClaim < 24) {
+          // Calculate remaining time
+          const remainingHours = Math.floor(24 - hoursSinceLastClaim);
+          const remainingMinutes = Math.floor((24 - hoursSinceLastClaim - remainingHours) * 60);
+          const remainingSeconds = Math.floor(((24 - hoursSinceLastClaim - remainingHours) * 60 - remainingMinutes) * 60);
+          
+          // Update countdown
+          const countdownEl = document.getElementById('countdown');
+          countdownEl.textContent = `${remainingHours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+          
+          claimStatus.textContent = "You've already claimed today. Come back in 24 hours.";
+          logoElement.classList.remove('pulse');
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    let hasClaimed = checkClaimed();
+    
+    claimLogo.addEventListener('click', function() {
+      if (!hasClaimed) {
+        hasClaimed = true;
+        const now = new Date();
+        localStorage.setItem('vixLastClaim', now.toString());
+        claimStatus.textContent = "You've already claimed today. Come back in 24 hours.";
+        logoElement.classList.remove('pulse');
+        
+        // Update VIX balance
+        const currentBalance = parseFloat(vixBalanceElement.textContent);
+        const newBalance = (currentBalance + 1).toFixed(6);
+        vixBalanceElement.textContent = newBalance;
+        localStorage.setItem('vixBalance', newBalance);
+        
+        // Show success message
+        successMessage.textContent = "Success! You've claimed 1 VIX Coin";
+        successMessage.classList.add('show');
+        setTimeout(function() {
+          successMessage.classList.remove('show');
+        }, 3000);
+        
+        // Reset countdown to 24 hours
+        const countdownEl = document.getElementById('countdown');
+        countdownEl.textContent = "24:00:00";
+        startCountdown();
+      }
+    });
+    
+    // Countdown timer
+    function startCountdown() {
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      
+      function updateCountdown() {
+        const countdownEl = document.getElementById('countdown');
+        let [hours, minutes, seconds] = countdownEl.textContent.split(':').map(Number);
+        
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else {
+          // Reset claim status when countdown reaches zero
+          hasClaimed = false;
+          claimStatus.textContent = "Tap the logo to claim your daily VIX";
+          logoElement.classList.add('pulse');
+          clearInterval(countdownInterval);
+        }
+        
+        countdownEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+    }
+    
+    // Start countdown if needed
+    if (hasClaimed) {
+      startCountdown();
+    }
+    
+    // Load VIX balance from localStorage
+    if (localStorage.getItem('vixBalance')) {
+      vixBalanceElement.textContent = localStorage.getItem('vixBalance');
+    } else {
+      localStorage.setItem('vixBalance', vixBalanceElement.textContent);
+    }
+    
+    // Check for referral in URL
+    function checkReferralInURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refUser = urlParams.get('ref');
+      const refWorldID = urlParams.get('wid');
+      
+      if (refUser && refWorldID && !localStorage.getItem('referralProcessed')) {
+        // Show gift box animation
+        setTimeout(function() {
+          const giftBoxContainer = document.getElementById('gift-box-container');
+          giftBoxContainer.classList.add('show');
+          
+          // Update VIX balance with bonus
+          const currentBalance = parseFloat(vixBalanceElement.textContent);
+          const newBalance = (currentBalance + 50).toFixed(6);
+          vixBalanceElement.textContent = newBalance;
+          localStorage.setItem('vixBalance', newBalance);
+          
+          // Mark referral as processed
+          localStorage.setItem('referralProcessed', 'true');
+        }, 3000);
+      }
+    }
+    
+    // Close gift box
+    const giftBoxClose = document.getElementById('gift-box-close');
+    const giftBoxContainer = document.getElementById('gift-box-container');
+    
+    if (giftBoxClose && giftBoxContainer) {
+      giftBoxClose.addEventListener('click', function() {
+        giftBoxContainer.classList.remove('show');
+      });
+    }
+    
+    // Box Slider functionality
+    const boxSlides = document.querySelectorAll('.box-slide');
+    const dots = document.querySelectorAll('.dot');
+    let currentSlide = 0;
+    let slideInterval;
+    
+    // Function to show a specific slide
+    function showSlide(index) {
+      // Hide all slides
+      boxSlides.forEach(slide => {
+        slide.classList.remove('active');
+      });
+      
+      // Remove active class from all dots
+      dots.forEach(dot => {
+        dot.classList.remove('active');
+      });
+      
+      // Show the selected slide
+      boxSlides[index].classList.add('active');
+      
+      // Add active class to the corresponding dot
+      dots[index].classList.add('active');
+      
+      // Update current slide
+      currentSlide = index;
+    }
+    
+    // Function to show the next slide
+    function nextSlide() {
+      const newIndex = (currentSlide + 1) % boxSlides.length;
+      showSlide(newIndex);
+    }
+    
+    // Set up dot navigation
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        showSlide(index);
+        
+        // Reset the auto-slide timer
+        clearInterval(slideInterval);
+        startAutoSlide();
+      });
+    });
+    
+    // Start auto-sliding
+    function startAutoSlide() {
+      slideInterval = setInterval(nextSlide, 6000); // Change slide every 6 seconds
+    }
+    
+    // Initialize auto-slide
+    startAutoSlide();
+    
+    // Copy functionality for Slide 1 (Invite Friends)
+    const inviteSlide = document.getElementById('box-slide-1');
+    const copyNotification = document.getElementById('copy-notification');
+    
+    inviteSlide.addEventListener('click', function() {
+      const referralLink = `${window.location.origin}${window.location.pathname}?ref=${username}&wid=${worldID}`;
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(referralLink).then(function() {
+        // Show copy notification
+        copyNotification.classList.add('show');
+        setTimeout(function() {
+          copyNotification.classList.remove('show');
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+      });
+    });
+    
+    // Make Buy VIX slide clickable with link
+    const buyVixSlide = document.getElementById('box-slide-3');
+    
+    buyVixSlide.addEventListener('click', function() {
+      const link = this.getAttribute('data-link');
+      if (link) {
+        window.open(link, '_blank');
+      }
+    });
+  </script>
+</body>
+</html>
