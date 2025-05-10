@@ -1,7 +1,3 @@
-// This is a utility function to extract just the logo from the coin image
-// In a real app, you would use image processing libraries
-// For this demo, we're using a simplified SVG version of the logo
-
 export function extractLogoFromImage(imagePath: string): string {
   // In a real app, this would process the image
   // For now, we're returning a simplified SVG of the logo

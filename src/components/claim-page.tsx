@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import VldLogo from "./vldx-logo"
+import VldLogo from "./vld-logo"
 
 export default function ClaimPage() {
   const [hasClaimed, setHasClaimed] = useState(false)

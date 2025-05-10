@@ -1,6 +1,3 @@
-// This is a mock service that would be replaced with actual backend logic
-// In a real app, this would interact with a database and blockchain
-
 interface ClaimStatus {
   hasClaimed: boolean
   nextClaimTime?: string

@@ -11,8 +11,8 @@
       font-family: Arial, sans-serif;
       background-color: black;
       color: white;
-      overflow-y: hidden;
     }
+    
     .container {
       max-width: 500px;
       margin: 0 auto;
@@ -156,14 +156,13 @@
     
     .box-slide {
       width: 100%;
-      height: 150px; /* Increased from 130px for better landscape display */
+      height: 130px; /* Increased from 120px for better visibility */
       border-radius: 12px;
       overflow: hidden;
       margin-bottom: 10px;
       cursor: pointer;
       display: none;
       position: relative;
-      background-color: #111; /* Background color for the slide */
     }
 
     .box-slide.active {
@@ -174,16 +173,13 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       background-color: #111; /* Add background color to prevent transparency issues */
     }
 
     .slide-image {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Changed to contain to ensure important elements aren't cut off */
+      object-fit: cover; /* Changed back to cover to ensure images fill the container */
       display: block; /* Ensure no extra space */
     }
     
@@ -343,86 +339,6 @@
       font-size: 14px;
       color: #aaa;
       margin-bottom: 30px;
-    }
-    
-    /* World ID button styles */
-    .world-id-button {
-      background-color: #333;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      margin-top: 20px;
-      transition: background-color 0.3s ease;
-    }
-    
-    .world-id-button:hover {
-      background-color: #444;
-    }
-    
-    .world-id-icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-      background-color: white;
-      border-radius: 50%;
-    }
-    
-    .verification-status {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #aaa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .verification-status.verified {
-      color: #4CAF50;
-    }
-    
-    .verification-status.loading {
-      color: #FFC107;
-    }
-    
-    .verification-status .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s linear infinite;
-      margin-right: 8px;
-    }
-    
-    .enter-app-button {
-      background-color: #2a6b2a;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      padding: 10px 30px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 30px;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateY(10px);
-      pointer-events: none;
-    }
-    
-    .enter-app-button.show {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-    
-    .enter-app-button:hover {
-      background-color: #358535;
-      transform: translateY(-2px);
     }
     
     /* Gift box animation */
@@ -630,22 +546,6 @@
     <img src="/images/base_logo_new.png" alt="Validium-X Logo" class="splash-logo">
     <div class="splash-slogan">The Backbone of Crypto</div>
     <div class="splash-sub-slogan">Powered by Validium-X</div>
-    
-    <!-- World ID Verification Button -->
-    <button class="world-id-button" id="world-id-button">
-      <div class="world-id-icon"></div>
-      Verify with World ID
-    </button>
-    
-    <!-- Verification Status -->
-    <div class="verification-status" id="verification-status">
-      Please verify with World ID to continue
-    </div>
-    
-    <!-- Enter App Button (shows after verification) -->
-    <button class="enter-app-button" id="enter-app-button">
-      Enter App
-    </button>
   </div>
 
   <!-- Gift Box Animation -->
@@ -720,7 +620,7 @@
           <!-- Slide 2: Validium XE (Image only) -->
           <div class="box-slide" id="box-slide-2">
             <div class="slide-image-container">
-              <img src="/images/VLDXE-comming-soon.png" alt="Validium XE" class="slide-image">
+              <img src="/images/VLDXE-coming-soon.png" alt="Validium XE" class="slide-image">
             </div>
           </div>
 
@@ -784,76 +684,27 @@
   </div>
   
   <script>
-    // World ID verification on splash screen
-    const worldIDButton = document.getElementById('world-id-button');
-    const verificationStatus = document.getElementById('verification-status');
-    const enterAppButton = document.getElementById('enter-app-button');
+    // Simplified splash screen handling - auto-transition after delay
     const splashScreen = document.getElementById('splash-screen');
-    
-    let isWorldIDVerified = false;
-    let worldID = "";
+
+    // Generate a random username for referrals
     let username = "User" + Math.floor(Math.random() * 10000);
-    
-    worldIDButton.addEventListener('click', function() {
-      // Disable button during verification
-      worldIDButton.disabled = true;
-      worldIDButton.style.opacity = '0.7';
-      
-      // Show loading state
-      verificationStatus.innerHTML = '<div class="spinner"></div> Verifying with World ID...';
-      verificationStatus.className = 'verification-status loading';
-      
-      // Simulate World ID verification (would be replaced with actual World ID SDK)
-      setTimeout(function() {
-        isWorldIDVerified = true;
-        worldID = "wld_" + Math.random().toString(36).substring(2, 15);
-        
-        // Update verification status
-        verificationStatus.innerHTML = '✓ Successfully verified with World ID';
-        verificationStatus.className = 'verification-status verified';
-        
-        // Update button
-        worldIDButton.textContent = "✓ Verified with World ID";
-        worldIDButton.style.backgroundColor = "#2a6b2a";
-        worldIDButton.disabled = true;
-        
-        // Show enter app button
-        enterAppButton.classList.add('show');
-        
-        // Store verification in localStorage
-        localStorage.setItem('worldIDVerified', 'true');
-        localStorage.setItem('worldID', worldID);
-        localStorage.setItem('username', username);
-        
-        // Check URL for referral
-        checkReferralInURL();
-      }, 2000);
-    });
-    
-    // Check if already verified
-    if (localStorage.getItem('worldIDVerified') === 'true') {
-      isWorldIDVerified = true;
-      worldID = localStorage.getItem('worldID') || "wld_" + Math.random().toString(36).substring(2, 15);
-      username = localStorage.getItem('username') || "User" + Math.floor(Math.random() * 10000);
-      
-      verificationStatus.innerHTML = '✓ Successfully verified with World ID';
-      verificationStatus.className = 'verification-status verified';
-      worldIDButton.textContent = "✓ Verified with World ID";
-      worldIDButton.style.backgroundColor = "#2a6b2a";
-      worldIDButton.disabled = true;
-      enterAppButton.classList.add('show');
-      
-      // Check URL for referral
-      checkReferralInURL();
-    }
-    
-    // Enter app button
-    enterAppButton.addEventListener('click', function() {
+    let worldID = "wld_" + Math.random().toString(36).substring(2, 15);
+
+    // Store user info in localStorage
+    localStorage.setItem('username', username);
+    localStorage.setItem('worldID', worldID);
+
+    // Check URL for referral
+    checkReferralInURL();
+
+    // Auto-transition from splash screen after a delay (simulating verification)
+    setTimeout(function() {
       splashScreen.style.opacity = '0';
       setTimeout(function() {
         splashScreen.style.display = 'none';
       }, 500);
-    });
+    }, 2000); // 2-second delay before transitioning
     
     // Tab switching
     const homeTab = document.getElementById('home-tab');

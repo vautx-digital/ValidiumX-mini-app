@@ -1,4 +1,3 @@
-// components/LogoAnimation.tsx
 import Image from 'next/image'
 
 interface LogoAnimationProps {

@@ -1,4 +1,3 @@
-// components/ui/vld-logo.tsx
 import Image from "next/image";
 
 interface VldLogoProps {
